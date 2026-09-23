@@ -1,61 +1,78 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { profile, contact } from "@/lib/content";
+import { useState } from "react";
+import { contact, profile } from "@/lib/content";
+import { ButtonLink, Reveal, Section, SectionHeading } from "@/components/ui";
 
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      window.location.href = `mailto:${profile.email}`;
+    }
+  };
+
   return (
-    <section id="contact" className="mx-auto max-w-6xl px-6 py-24 sm:px-10">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.5 }}
-        className="rounded-3xl bg-zinc-900 px-8 py-16 text-center dark:bg-zinc-100 sm:px-16"
-      >
-        <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl dark:text-zinc-900">
-          {contact.heading}
-        </h2>
-        <p className="mx-auto mt-4 max-w-xl text-base text-zinc-300 dark:text-zinc-600">
-          {contact.subtext}
-        </p>
+    <>
+      <Section id="contact" tone="paper">
+        <SectionHeading eyebrow={contact.eyebrow} title={contact.heading} intro={contact.subtext} />
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          {profile.email && (
-            <a
-              href={`mailto:${profile.email}`}
-              className="rounded-full bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-200 dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-800"
-            >
-              {profile.email}
-            </a>
-          )}
-          {profile.linkedin && (
-            <a
-              href={profile.linkedin}
-              className="rounded-full border border-zinc-600 px-6 py-3 text-sm font-medium text-white transition hover:border-zinc-400 dark:border-zinc-400 dark:text-zinc-900"
-            >
-              LinkedIn
-            </a>
-          )}
-          {profile.github && (
-            <a
-              href={profile.github}
-              className="rounded-full border border-zinc-600 px-6 py-3 text-sm font-medium text-white transition hover:border-zinc-400 dark:border-zinc-400 dark:text-zinc-900"
-            >
-              GitHub
-            </a>
-          )}
+        <Reveal>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="flex items-stretch overflow-hidden rounded-md border border-line bg-cream">
+              <a
+                href={`mailto:${profile.email}`}
+                className="px-5 py-3 font-mono text-sm text-ink hover:text-accent"
+              >
+                {profile.email}
+              </a>
+              <button
+                type="button"
+                onClick={copyEmail}
+                className="border-l border-line bg-paper px-4 text-sm text-ink transition-colors hover:bg-cream"
+              >
+                {copied ? "Copied ✓" : "Copy"}
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {profile.linkedin && (
+                <ButtonLink href={profile.linkedin} external>
+                  LinkedIn <span aria-hidden>↗</span>
+                </ButtonLink>
+              )}
+              {profile.github && (
+                <ButtonLink href={profile.github} external>
+                  GitHub <span aria-hidden>↗</span>
+                </ButtonLink>
+              )}
+              {profile.cvUrl && (
+                <ButtonLink href={profile.cvUrl} external>
+                  <span aria-hidden>📄</span> CV
+                </ButtonLink>
+              )}
+            </div>
+          </div>
+          <p className="mt-6 font-mono text-sm text-muted">{profile.location}</p>
+        </Reveal>
+      </Section>
+
+      <footer className="border-t border-line bg-cream">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <p>
+            © {new Date().getFullYear()} {profile.name}
+            <span className="mx-2">·</span>
+            {profile.location}
+          </p>
+          <a href="#about" className="hover:text-ink">
+            Back to top ↑
+          </a>
         </div>
-
-        <p className="mt-8 text-xs text-zinc-400 dark:text-zinc-500">
-          {profile.location}
-        </p>
-      </motion.div>
-
-      <footer className="mt-10 flex flex-col items-center justify-between gap-2 text-xs text-zinc-500 sm:flex-row">
-        <p>© {new Date().getFullYear()} {profile.name}</p>
-        <p>{profile.location}</p>
       </footer>
-    </section>
+    </>
   );
 }

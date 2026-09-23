@@ -1,23 +1,27 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import AreasOfFocus from "@/components/AreasOfFocus";
+import FeaturedProject from "@/components/FeaturedProject";
 import Projects from "@/components/Projects";
 import Background from "@/components/Background";
+import Capabilities from "@/components/Capabilities";
+import Currently from "@/components/Currently";
 import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-zinc-50 dark:bg-black">
+    <>
       <Nav />
-      <div id="about">
+      <main>
         <Hero />
-      </div>
-      <AreasOfFocus />
-      <Projects />
-      <div id="background">
+        <AreasOfFocus />
+        <FeaturedProject />
+        <Projects />
         <Background />
-      </div>
-      <Contact />
-    </main>
+        <Capabilities />
+        <Currently />
+        <Contact />
+      </main>
+    </>
   );
 }

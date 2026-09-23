@@ -1,37 +1,22 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { areasOfFocus } from "@/lib/content";
+import { focus } from "@/lib/content";
+import { Reveal, Section, SectionHeading } from "@/components/ui";
 
 export default function AreasOfFocus() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-20 sm:px-10">
-      <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
-        Areas of focus
-      </p>
-      <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50">
-        The technical areas connecting my projects and experience.
-      </h2>
+    <Section id="focus" tone="paper">
+      <SectionHeading eyebrow={focus.eyebrow} title={focus.heading} intro={focus.intro} />
 
-      <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
-        {areasOfFocus.map((area, i) => (
-          <motion.div
-            key={area.title}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950"
-          >
-            <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-50">
-              {area.title}
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              {area.description}
-            </p>
-          </motion.div>
+      <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+        {focus.areas.map((area, i) => (
+          <Reveal key={area.title} delay={i * 0.08}>
+            <div className="h-full rounded-lg border border-line bg-cream p-6">
+              <p className="font-mono text-xs text-muted">0{i + 1}</p>
+              <h3 className="mt-3 text-lg font-semibold text-ink">{area.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{area.description}</p>
+            </div>
+          </Reveal>
         ))}
       </div>
-    </section>
+    </Section>
   );
 }
