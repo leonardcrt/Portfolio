@@ -8,10 +8,10 @@ export const profile = {
   name: "Léonard Court",
   initials: "LC",
   eyebrow: "ETH Zurich · EPFL",
-  tagline: "Robotics, Control & Applied AI Automation",
+  tagline: "Robot Learning, Reinforcement Learning & Computer Vision",
   intro: [
     "M.Sc. student in Robotics, Systems and Control at ETH Zurich, following a B.Sc. in Mechanical Engineering at EPFL and a study-abroad year at the University of Illinois Urbana-Champaign.",
-    "My interests lie at the intersection of control, robotics, and applied AI, with a focus on systems that hold up outside the classroom: on hardware, and inside real businesses.",
+    "I am focusing on robot learning and computer vision: teaching robots to act from data through imitation and reinforcement learning, and to perceive their environment, with rigorous evaluation on situations they have never seen.",
   ],
   availability: "Available from September 2027. Open to conversations before then.",
   location: "Zurich, Switzerland",
@@ -19,7 +19,7 @@ export const profile = {
   photoAlt: "Léonard Court presenting",
   email: "lcourt@ethz.ch",
   linkedin: "https://www.linkedin.com/in/l%C3%A9onard-court-285a44332/",
-  github: "", // vide = le bouton GitHub n'apparaît pas
+  github: "https://github.com/leonardcrt", // vide = le bouton GitHub n'apparaît pas
   cvUrl: "/documents/Court_Leonard_CV.pdf",
 };
 
@@ -37,24 +37,24 @@ export const navLinks = [
 // ---------------------------------------------------------------------------
 export const focus = {
   eyebrow: "Areas of focus",
-  heading: "The technical areas connecting my projects and experience.",
+  heading: "The technical areas connecting my projects and studies.",
   intro:
-    "My work spans control, robotics, mechanical design, and AI-driven automation, with a focus on systems that stay reliable once they leave the simulator or the slide deck.",
+    "I am building toward robot learning and computer vision, on top of a foundation in control and mechanical engineering: learned behavior is only useful if it stays reliable on hardware and on unseen situations.",
   areas: [
     {
-      title: "Control & Optimal Decision-Making",
+      title: "Robot Learning & Reinforcement Learning",
       description:
-        "Dynamical systems, robot dynamics, model predictive control, and dynamic programming for optimal control.",
+        "Imitation learning (behavior cloning, DAgger), reinforcement learning (PPO), policy architectures, and evaluation on unseen environments.",
     },
     {
-      title: "Robotics & Mechanical Systems",
+      title: "Computer Vision for Robotics",
       description:
-        "Mechanical design, prototyping, and system integration, from CAD and manufacturing to testing on real hardware.",
+        "Visual perception for mobile robots: feature-based vision, camera geometry, and visual odometry, studied through Vision Algorithms for Mobile Robotics.",
     },
     {
-      title: "Applied AI & Automation",
+      title: "Control & Dynamics",
       description:
-        "Probabilistic AI and LLM-based automation pipelines that turn manual, document-heavy workflows into reliable systems.",
+        "Robot dynamics, model predictive control, and optimal control, used both on their own and as strong baselines and experts for learning-based methods.",
     },
   ],
 };
@@ -64,36 +64,39 @@ export const focus = {
 // ---------------------------------------------------------------------------
 export const featured = {
   eyebrow: "Featured project",
-  title: "Deadal.IA — AI Tender-Monitoring and Proposal Pipeline",
-  meta: ["Deadal.IA", "Founder", "2026 – present"],
+  title: "Learning-Based Robot Navigation",
+  meta: ["Personal project (solo)", "2026", "PyTorch · Stable-Baselines3 · ROS 2"],
   description:
-    "An end-to-end automation built in N8N that monitors Swiss public procurement notices on simap.ch, ranks each tender against a company's profile with an LLM, and prepares a structured application folder for every relevant opportunity.",
-  scopeTitle: "Pipeline scope",
-  scope: [
-    "Automated collection of tenders from simap.ch",
-    "Normalization and de-duplication against already-processed notices",
-    "LLM relevance triage (Claude) with a strict output schema: relevant or not, score, rationale",
-    "Ranked summary report exported as PDF",
-    "Per-tender loop: extraction, independent review, cover letter, quality check, feasibility",
-    "Delivery into a structured Google Drive folder per tender",
+    "A simulated two-wheeled robot must reach a goal while avoiding obstacles. I compared three ways of producing its behavior on the same 500 unseen test maps: a hand-written controller, a neural network that imitates it (behavior cloning + DAgger), and a network trained by reinforcement learning (PPO) that never sees the expert.",
+  video: "/videos/showcase.mp4",
+  poster: "/videos/showcase_poster.png",
+  mediaCaption: "Training progress and expert vs imitation vs reinforcement learning on an unseen map",
+  stats: [
+    { value: "97%", label: "PPO success rate on 500 unseen test maps, matching the expert without any demonstrations" },
+    { value: "34%", label: "faster than the hand-written expert on average" },
+    { value: "93% → 96%", label: "imitation-learning success after DAgger (collisions cut from 3% to 0.2%)" },
+    { value: "93% vs 33%", label: "success of a permutation-invariant network vs a standard MLP of similar size" },
   ],
-  contributionsTitle: "What I built",
-  contributions: [
-    "Designed the full workflow architecture in N8N, from monitoring trigger to Drive delivery.",
-    "Wrote the triage logic comparing the requested trade with the company profile, with a strict schema so every verdict is machine-readable.",
-    "Added a second-pass review and a bounded rewrite step (one retry max) so generated documents are checked before delivery.",
+  builtTitle: "What I built",
+  built: [
+    "A 2D navigation environment (differential-drive kinematics, obstacles, collision checking, Gymnasium API) with guaranteed-solvable maps and strictly separated training, validation and test sets.",
+    "A hand-written expert controller (Vector Field Histogram, 97% success, 0 collisions), after showing that a potential-field approach plateaus at 76% because of local minima.",
+    "A permutation-invariant DeepSets policy network in PyTorch, shared by imitation and reinforcement learning so that the comparison isolates the learning method, not the architecture.",
+    "Behavior cloning and DAgger pipelines, and PPO training with a custom feature extractor and reward shaping.",
+    "An evaluation protocol with confidence intervals, ablation studies, learning-progress videos and an interactive simulator.",
+    "A ROS 2 node that runs the trained policy in closed loop, packaged with Docker, unit tests and CI.",
   ],
-  image: "/images/projects/deadal-ia.png",
-  imageCaption: "N8N workflow (excerpt)",
-  pipelineLabel: "simap.ch · LLM triage",
-  pipeline: [
-    "Tender monitoring",
-    "Normalization",
-    "LLM triage",
-    "Ranked report",
-    "Proposal drafting",
-    "Drive delivery",
+  learnedTitle: "What I learned",
+  learned: [
+    "Low training loss does not mean good behavior: the standard MLP had a validation loss close to the DeepSets network but failed 67% of the time once its own decisions fed back into the next state.",
+    "Imitation learning suffers from compounding errors; DAgger fixes this by letting the expert correct the states the learner actually visits.",
+    "The architecture's inductive bias matters as much as the algorithm: encoding obstacles as a set rather than an ordered list tripled the success rate.",
+    "Reward design is a trade-off: a time penalty made PPO faster than the expert, but also more willing to take risks (2.6% collisions).",
+    "Classical methods have structural limits (local minima of potential fields) worth understanding before replacing them with learning.",
+    "Rigorous evaluation: disjoint test sets, confidence intervals, ablations, and one shared observation function between training, evaluation and ROS 2 deployment to avoid train/deploy mismatch.",
   ],
+  tools: ["PyTorch", "Stable-Baselines3", "ROS 2", "Docker", "Gymnasium"],
+  link: { label: "View code on GitHub", url: "https://github.com/leonardcrt/robot-learn" },
 };
 
 // ---------------------------------------------------------------------------
@@ -108,22 +111,34 @@ export type Project = {
   recognition?: string;
   description: string;
   tools: string[];
-  image: string;
+  image: string; // image, ou image d'attente (poster) si une vidéo est fournie
+  video?: string; // optionnel : chemin d'une vidéo .mp4 muette qui tourne en boucle
   imageCaption: string;
+  highlightsTitle?: string;
+  highlights?: string[];
+  link?: { label: string; url: string };
 };
 
 export const projects: Project[] = [
   {
-    slug: "deadal-ia",
-    title: "Deadal.IA",
-    category: "Applied AI · Automation · Entrepreneurship",
-    role: "Founder",
-    date: "2026 – present",
+    slug: "robot-learning",
+    title: "Learning-Based Robot Navigation",
+    category: "Robotics · Machine Learning · Reinforcement Learning",
+    role: "Personal project (solo)",
+    date: "2026",
     description:
-      "Founded an AI consulting and automation studio building N8N-based automations for Swiss companies in regulated technical-inspection industries (electrical inspection NIV/OIBT, elevator maintenance) across French-speaking Switzerland and the Zurich area.",
-    tools: ["N8N", "LLM workflows", "Claude", "Google Workspace"],
-    image: "/images/projects/deadal-ia.png",
-    imageCaption: "Tender-monitoring workflow",
+      "A simulated two-wheeled robot must reach a goal while avoiding obstacles. I compared a hand-written controller, a network that imitates it (behavior cloning + DAgger), and a network trained by reinforcement learning (PPO) that never sees the expert, on the same 500 unseen test maps.",
+    tools: ["PyTorch", "Stable-Baselines3", "ROS 2", "Docker", "Gymnasium"],
+    image: "/videos/showcase_poster.png",
+    video: "/videos/showcase.mp4",
+    imageCaption: "Expert vs imitation vs reinforcement learning",
+    highlightsTitle: "Key results",
+    highlights: [
+      "PPO reaches 97% success on unseen maps without any demonstrations, and is 34% faster than the expert.",
+      "DAgger raises imitation-learning success from 93% to 96% and cuts collisions from 3% to 0.2%.",
+      "A permutation-invariant network reaches 93% success where a standard MLP of similar size reaches 33%.",
+    ],
+    link: { label: "View code on GitHub", url: "https://github.com/leonardcrt/robot-learn" },
   },
   {
     slug: "epfl-rocket-team",
@@ -136,6 +151,18 @@ export const projects: Project[] = [
     tools: ["SolidWorks", "3D printing", "CNC machining", "Systems integration"],
     image: "/images/projects/rocket-team.jpg",
     imageCaption: "Firehorn team and rocket",
+  },
+  {
+    slug: "deadal-ia",
+    title: "Deadal.IA",
+    category: "Side project · Applied AI · Automation",
+    role: "Founder",
+    date: "2026 – present",
+    description:
+      "Side project building AI automations in N8N for Swiss companies in regulated technical-inspection industries, including a pipeline that monitors public tenders on simap.ch, ranks them against a company profile with an LLM, and drafts an application folder for each relevant one.",
+    tools: ["N8N", "LLM workflows", "AI automation", "Product development"],
+    image: "/images/projects/deadal-ia.png",
+    imageCaption: "Tender-monitoring workflow in N8N",
   },
   {
     slug: "the-academy",
@@ -168,6 +195,7 @@ export type EducationEntry = {
   coursesTitle?: string;
   courses?: Course[];
   gradingNote?: string;
+  fullCourseworkTitle?: string;
   fullCoursework?: string[];
 };
 
@@ -180,11 +208,11 @@ export const education: EducationEntry[] = [
     status: "Current graduate student",
     coursesTitle: "Current coursework (Fall 2026)",
     courses: [
-      { name: "Robot Dynamics" },
       { name: "Probabilistic Artificial Intelligence" },
+      { name: "Vision Algorithms for Mobile Robotics (UZH)" },
+      { name: "Robot Dynamics" },
       { name: "Model Predictive Control" },
       { name: "Dynamic Programming and Optimal Control" },
-      { name: "Vision Algorithms for Mobile Robotics (UZH)" },
     ],
   },
   {
@@ -215,31 +243,26 @@ export const education: EducationEntry[] = [
       "Ground Station Engineer, EPFL Rocket Team",
       "Teaching Assistant (4 courses)",
       "First-Year Student Coach",
-      "National-level gymnast",
     ],
     coursesTitle: "Selected quantitative coursework",
     courses: [
       { name: "Dynamical Systems", grade: "6.00 / 6.0" },
       { name: "Numerical Analysis", grade: "6.00 / 6.0" },
       { name: "Analysis III", grade: "6.00 / 6.0" },
-      { name: "Mechanics of Structures", grade: "6.00 / 6.0" },
       { name: "Probability and Statistics", grade: "5.75 / 6.0" },
       { name: "Programming for Engineers", grade: "5.75 / 6.0" },
       { name: "Electrical Engineering Science & Technology", grade: "5.75 / 6.0" },
+      { name: "Analysis IV", grade: "5.50 / 6.0" },
     ],
     gradingNote: "EPFL grading scale: 6.0 is the highest possible grade; 4.0 is the passing grade.",
+    fullCourseworkTitle: "other coursework",
     fullCoursework: [
-      "Analysis I, II, III, IV",
+      "Analysis I & II",
       "Linear Algebra",
-      "Numerical Analysis",
-      "Probability and Statistics",
-      "Dynamical Systems",
-      "Programming for Engineers",
       "Information, Computation, Communication",
       "General Physics: Mechanics",
       "General Physics: Thermodynamics",
       "General Physics: Electromagnetism",
-      "Electrical Engineering Science & Technology",
       "Mechanics of Structures",
       "Introduction to Structural Mechanics",
       "Mechanical Systems",
@@ -255,7 +278,7 @@ export const education: EducationEntry[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// BACKGROUND — EXPERIENCE
+// BACKGROUND — EXPERIENCE (dans l'ordre d'affichage)
 // ---------------------------------------------------------------------------
 export type ExperienceEntry = {
   org: string;
@@ -267,12 +290,12 @@ export type ExperienceEntry = {
 
 export const experience: ExperienceEntry[] = [
   {
-    org: "Deadal.IA",
-    date: "2026 – present",
-    role: "Founder",
-    tag: "Entrepreneurship",
+    org: "EPFL",
+    date: "Sep 2024 – Jul 2025",
+    role: "Teaching Assistant — Physics, Thermodynamics & Computation",
+    tag: "Teaching",
     description:
-      "Building AI consulting and N8N automation offerings for Swiss companies in regulated technical-inspection industries, including an end-to-end public-tender monitoring and proposal pipeline.",
+      "Supported a cohort of 500+ students across four course assignments: Physics: Mechanics (Prof. P. Müllhaupt), Physics: Thermodynamics (Prof. S. Bréchet and Prof. J. Genoud), and Information, Computation, Communication (Prof. O. Lévêque). Led exercise sessions, graded midterms, and gave feedback.",
   },
   {
     org: "EPFL Rocket Team",
@@ -281,14 +304,6 @@ export const experience: ExperienceEntry[] = [
     tag: "Engineering",
     description:
       "Mechanical design, prototyping, and testing of ground support components for competition-level rocketry; CAD, 3D printing, CNC machining, and cross-subsystem integration.",
-  },
-  {
-    org: "EPFL",
-    date: "Sep 2024 – Jul 2025",
-    role: "Teaching Assistant — Physics, Thermodynamics & Computation",
-    tag: "Teaching",
-    description:
-      "Supported a cohort of 500+ students across four course assignments: Physics: Mechanics (Prof. P. Müllhaupt), Physics: Thermodynamics (Prof. S. Bréchet and Prof. J. Genoud), and Information, Computation, Communication (Prof. O. Lévêque). Led exercise sessions, graded midterms, and gave feedback.",
   },
   {
     org: "EPFL Coaching",
@@ -314,29 +329,35 @@ export const experience: ExperienceEntry[] = [
 export const capabilities = {
   eyebrow: "Capabilities",
   heading: "Technical breadth",
-  intro: "Tools and methods I work with across control, engineering, software, and automation.",
+  intro: "Tools and methods I work with across robot learning, control, engineering, and software.",
   groups: [
     {
       title: "Methods",
       items: [
-        "Control systems",
-        "Optimal control & dynamic programming",
+        "Reinforcement learning (PPO)",
+        "Imitation learning (BC, DAgger)",
+        "Control systems & optimal control",
         "Probabilistic modeling",
         "Numerical methods",
-        "Finite element analysis",
       ],
     },
     {
       title: "Programming",
-      items: ["Python", "C", "MATLAB"],
+      items: ["Python", "PyTorch", "ROS 2", "C", "MATLAB"],
+    },
+    {
+      title: "Evaluation & tooling",
+      items: [
+        "Stable-Baselines3 & Gymnasium",
+        "Docker, unit tests & CI",
+        "Held-out test sets",
+        "Confidence intervals & ablations",
+        "N8N & LLM workflows",
+      ],
     },
     {
       title: "Engineering",
       items: ["SolidWorks", "Fusion 360", "CATIA", "Abaqus", "3D printing & CNC machining"],
-    },
-    {
-      title: "Automation",
-      items: ["N8N workflows", "LLM pipelines", "Structured AI outputs", "Web data collection", "Google Workspace integration"],
     },
   ],
   languages: "French (native) · English (C1) · Spanish (B1)",
@@ -349,14 +370,14 @@ export const currently = {
   eyebrow: "Status",
   heading: "Currently",
   lines: [
-    "First semester of the M.Sc. Robotics, Systems and Control at ETH Zurich. Graduating in 2028.",
-    "Building Deadal.IA alongside my studies. Open to internships and collaborations in robotics, control, and applied AI from September 2027.",
+    "First semester of the M.Sc. Robotics, Systems and Control at ETH Zurich, with coursework in probabilistic AI, vision for mobile robots, and optimal control. Graduating in 2028.",
+    "Looking for internships in robot learning, reinforcement learning, and computer vision from September 2027.",
   ],
 };
 
 export const contact = {
   eyebrow: "Contact",
-  heading: "Let's build systems that work in the real world.",
+  heading: "Let's build robots that learn and hold up in the real world.",
   subtext:
-    "Open to conversations and opportunities in robotics, control systems, applied AI, and automation.",
+    "Open to conversations and opportunities in robot learning, reinforcement learning, computer vision, and control.",
 };

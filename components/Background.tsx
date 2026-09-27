@@ -64,7 +64,7 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
             aria-expanded={showAll}
             className="text-sm font-medium text-accent underline-offset-4 hover:underline"
           >
-            {showAll ? "Hide full coursework" : "See all relevant coursework"}{" "}
+            {showAll ? `Hide ${entry.fullCourseworkTitle ?? "full coursework"}` : `See ${entry.fullCourseworkTitle ?? "all relevant coursework"}`}{" "}
             <span aria-hidden>{showAll ? "↑" : "↓"}</span>
           </button>
           <AnimatePresence initial={false}>

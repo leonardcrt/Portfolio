@@ -1,6 +1,19 @@
-import Image from "next/image";
 import { featured } from "@/lib/content";
-import { Eyebrow, Reveal, Section } from "@/components/ui";
+import Media from "@/components/Media";
+import { ButtonLink, Eyebrow, Reveal, Section, Tag } from "@/components/ui";
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="mt-4 space-y-3">
+      {items.map((s) => (
+        <li key={s} className="flex gap-3 text-sm leading-relaxed text-muted">
+          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+          {s}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default function FeaturedProject() {
   return (
@@ -23,73 +36,62 @@ export default function FeaturedProject() {
         </p>
       </Reveal>
 
-      <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1fr]">
-        <Reveal className="space-y-10">
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-ink">
-              {featured.scopeTitle}
-            </h3>
-            <ul className="mt-4 space-y-2.5">
-              {featured.scope.map((s) => (
-                <li key={s} className="flex gap-3 text-sm leading-relaxed text-muted">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                  {s}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-ink">
-              {featured.contributionsTitle}
-            </h3>
-            <ul className="mt-4 space-y-2.5">
-              {featured.contributions.map((c) => (
-                <li key={c} className="flex gap-3 text-sm leading-relaxed text-muted">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                  {c}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.1} className="space-y-6">
+      <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-[1.45fr_1fr] lg:items-start">
+        <Reveal>
           <figure className="overflow-hidden rounded-lg border border-line bg-paper">
-            <div className="relative aspect-[16/10] w-full">
-              <Image
-                src={featured.image}
-                alt={featured.imageCaption}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-left-top"
+            <div className="relative aspect-[3/2] w-full">
+              <Media
+                video={featured.video}
+                image={featured.poster}
+                alt={featured.mediaCaption}
+                sizes="(max-width: 1024px) 100vw, 640px"
               />
             </div>
-            <figcaption className="border-t border-line px-4 py-3 font-mono text-xs text-muted">
-              {featured.imageCaption}
+            <figcaption className="border-t border-line px-4 py-3 font-mono text-xs italic text-muted">
+              {featured.mediaCaption}
             </figcaption>
           </figure>
+        </Reveal>
 
-          <div className="rounded-lg border border-line bg-paper p-5">
-            <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
-              {featured.pipelineLabel}
-            </p>
-            <p className="mt-1 text-sm font-semibold text-ink">Pipeline</p>
-            <ol className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {featured.pipeline.map((step, i) => (
-                <li
-                  key={step}
-                  className="relative rounded-md border border-line bg-cream px-3 py-2.5"
-                >
-                  <span className="font-mono text-[11px] text-accent">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="block text-sm text-ink">{step}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
+        <Reveal delay={0.1}>
+          <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {featured.stats.map((s) => (
+              <div key={s.value} className="rounded-lg border border-line bg-paper p-5">
+                <dt className="text-2xl font-semibold tracking-tight text-accent">{s.value}</dt>
+                <dd className="mt-2 text-sm leading-snug text-muted">{s.label}</dd>
+              </div>
+            ))}
+          </dl>
         </Reveal>
       </div>
+
+      <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-2">
+        <Reveal>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-ink">
+            {featured.builtTitle}
+          </h3>
+          <BulletList items={featured.built} />
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-ink">
+            {featured.learnedTitle}
+          </h3>
+          <BulletList items={featured.learned} />
+        </Reveal>
+      </div>
+
+      <Reveal className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-2">
+          {featured.tools.map((t) => (
+            <Tag key={t}>{t}</Tag>
+          ))}
+        </div>
+        {featured.link && (
+          <ButtonLink href={featured.link.url} variant="solid" external>
+            {featured.link.label} <span aria-hidden>↗</span>
+          </ButtonLink>
+        )}
+      </Reveal>
     </Section>
   );
 }

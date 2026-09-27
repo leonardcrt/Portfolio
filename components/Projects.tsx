@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import Media from "@/components/Media";
 import { AnimatePresence, motion } from "framer-motion";
 import { projects } from "@/lib/content";
 import { Reveal, Section, SectionHeading, Tag } from "@/components/ui";
@@ -55,12 +55,11 @@ export default function Projects() {
             >
               <figure className="border-b border-line bg-paper lg:border-b-0 lg:border-r">
                 <div className="relative aspect-[3/2] w-full">
-                  <Image
-                    src={project.image}
+                  <Media
+                    video={project.video}
+                    image={project.image}
                     alt={project.imageCaption}
-                    fill
                     sizes="(max-width: 1024px) 100vw, 55vw"
-                    className="object-cover"
                   />
                 </div>
                 <figcaption className="px-4 py-3 font-mono text-xs italic text-muted">
@@ -97,11 +96,36 @@ export default function Projects() {
                   )}
                 </dl>
 
+                {project.highlights && (
+                  <div className="mt-6">
+                    <p className="font-mono text-xs text-muted">{project.highlightsTitle}</p>
+                    <ul className="mt-2 space-y-2">
+                      {project.highlights.map((h) => (
+                        <li key={h} className="flex gap-3 text-sm leading-relaxed text-ink/85">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 <div className="mt-6 flex flex-wrap gap-2">
                   {project.tools.map((t) => (
                     <Tag key={t}>{t}</Tag>
                   ))}
                 </div>
+
+                {project.link && (
+                  <a
+                    href={project.link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-block text-sm font-medium text-accent underline-offset-4 hover:underline"
+                  >
+                    {project.link.label} ↗
+                  </a>
+                )}
               </div>
             </motion.article>
           </AnimatePresence>

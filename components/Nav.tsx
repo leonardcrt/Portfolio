@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { navLinks, profile } from "@/lib/content";
+import { DocIcon } from "@/components/Media";
 
 export default function Nav() {
   const [active, setActive] = useState<string>("about");
@@ -69,9 +70,9 @@ export default function Nav() {
               href={profile.cvUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md border border-line bg-paper px-4 py-2 text-[15px] text-ink transition-colors hover:border-ink/40"
+              className="inline-flex items-center gap-2 rounded-md border border-line bg-paper px-4 py-2 text-[15px] text-ink transition-colors hover:border-ink/40"
             >
-              <span aria-hidden>📄</span> CV
+              <DocIcon /> CV
             </a>
           )}
         </div>
@@ -104,9 +105,9 @@ export default function Nav() {
               href={profile.cvUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 inline-block rounded-md border border-line bg-paper px-4 py-2 text-base text-ink"
+              className="mt-2 inline-flex items-center gap-2 rounded-md border border-line bg-paper px-4 py-2 text-base text-ink"
             >
-              <span aria-hidden>📄</span> CV
+              <DocIcon /> CV
             </a>
           )}
         </div>

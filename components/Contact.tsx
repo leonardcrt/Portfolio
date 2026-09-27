@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { contact, profile } from "@/lib/content";
+import { DocIcon } from "@/components/Media";
 import { ButtonLink, Reveal, Section, SectionHeading } from "@/components/ui";
 
 export default function Contact() {
@@ -52,7 +53,7 @@ export default function Contact() {
               )}
               {profile.cvUrl && (
                 <ButtonLink href={profile.cvUrl} external>
-                  <span aria-hidden>📄</span> CV
+                  <DocIcon /> CV
                 </ButtonLink>
               )}
             </div>
