@@ -55,8 +55,15 @@ export default function FeaturedProject() {
 
         <Reveal delay={0.1}>
           <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {featured.stats.map((s) => (
-              <div key={s.value} className="rounded-lg border border-line bg-paper p-5">
+            {featured.stats.map((s, i) => (
+              <div
+                key={s.value}
+                className={
+                  featured.stats.length % 2 === 1 && i === featured.stats.length - 1
+                    ? "rounded-lg border border-line bg-paper p-5 sm:col-span-2"
+                    : "rounded-lg border border-line bg-paper p-5"
+                }
+              >
                 <dt className="text-2xl font-semibold tracking-tight text-accent">{s.value}</dt>
                 <dd className="mt-2 text-sm leading-snug text-muted">{s.label}</dd>
               </div>

@@ -65,9 +65,9 @@ export const focus = {
 export const featured = {
   eyebrow: "Featured project",
   title: "Learning-Based Robot Navigation",
-  meta: ["Personal project (solo)", "2026", "PyTorch · Stable-Baselines3 · ROS 2"],
+  meta: ["Personal project (solo)", "Jul 2026 – Oct 2026", "PyTorch · Stable-Baselines3 · MuJoCo · ROS 2"],
   description:
-    "A simulated two-wheeled robot must reach a goal while avoiding obstacles. I compared three ways of producing its behavior on the same 500 unseen test maps: a hand-written controller, a neural network that imitates it (behavior cloning + DAgger), and a network trained by reinforcement learning (PPO) that never sees the expert.",
+    "A simulated two-wheeled robot must reach a goal while avoiding obstacles. I compared three ways of producing its behavior on the same 500 unseen test maps: a hand-written controller, a neural network that imitates it (behavior cloning + DAgger), and a network trained by reinforcement learning (PPO) that never sees the expert. Policies were also evaluated and trained in a rigid-body physics engine (MuJoCo), beyond the kinematic simulator.",
   video: "/videos/showcase.mp4",
   poster: "/videos/showcase_poster.png",
   mediaCaption: "Training progress and expert vs imitation vs reinforcement learning on an unseen map",
@@ -76,6 +76,7 @@ export const featured = {
     { value: "34%", label: "faster than the hand-written expert on average" },
     { value: "93% → 96%", label: "imitation-learning success after DAgger (collisions cut from 3% to 0.2%)" },
     { value: "93% vs 33%", label: "success of a permutation-invariant network vs a standard MLP of similar size" },
+    { value: "< 1 pt", label: "change in success in MuJoCo at nominal dynamics, without retraining; with a slower robot, learned policies reach 5–7.5% collisions (vs 0.4–2.8%) while the expert stays at 0%" },
   ],
   builtTitle: "What I built",
   built: [
@@ -85,6 +86,7 @@ export const featured = {
     "BC and DAgger pipelines; PPO with custom features and reward shaping.",
     "An evaluation protocol with confidence intervals, ablations, learning-progress videos and an interactive simulator.",
     "A ROS 2 closed-loop policy node, packaged with Docker, tests and CI.",
+    "A MuJoCo version of the environment (5 kg rigid cylinder, force-limited velocity controller, ten 0.01 s sub-steps per 0.1 s control step) with the same observations, rewards and test maps, so existing checkpoints run unchanged: all policies re-evaluated without retraining, tested with slower robots, and PPO retrained inside MuJoCo (1.5M steps, about 54 min on CPU).",
   ],
   learnedTitle: "What I learned",
   learned: [
@@ -94,8 +96,11 @@ export const featured = {
     "A time penalty made PPO 34% faster, but riskier (2.6% collisions).",
     "Understand classical limits (e.g. local minima) before replacing them.",
     "Rigorous evaluation: disjoint test sets, confidence intervals, ablations, and one observation function shared by training, evaluation and ROS 2 deployment.",
+    "A physics engine can leave a policy almost untouched or break it: the gap was under 1 point at nominal dynamics and only appeared with a much slower robot.",
+    "Negative results are worth reporting: actuator lag did not raise collisions at nominal dynamics, and PPO retrained in MuJoCo (95.0%, 4.8% collisions) did not beat the original PPO evaluated there (97.4%, 2.6%); with one seed, I cannot tell a real difference from noise.",
+    "Explicit damping forces need c·Δt/m < 2 to stay stable (checked by measurement), and a controller's time constants should be compared to the safety margins.",
   ],
-  tools: ["PyTorch", "Stable-Baselines3", "ROS 2", "Docker", "Gymnasium"],
+  tools: ["PyTorch", "Stable-Baselines3", "MuJoCo", "ROS 2", "Docker", "Gymnasium"],
   link: { label: "View code on GitHub", url: "https://github.com/leonardcrt/robot-learn" },
 };
 
@@ -125,10 +130,10 @@ export const projects: Project[] = [
     title: "Learning-Based Robot Navigation",
     category: "Robotics · Machine Learning · Reinforcement Learning",
     role: "Personal project (solo)",
-    date: "2026",
+    date: "Jul 2026 – Oct 2026",
     description:
-      "A simulated two-wheeled robot learns to reach a goal while avoiding obstacles. I compared a hand-written controller, imitation learning (BC + DAgger) and reinforcement learning (PPO) on 500 unseen test maps.",
-    tools: ["PyTorch", "Stable-Baselines3", "ROS 2", "Docker", "Gymnasium"],
+      "A simulated two-wheeled robot learns to reach a goal while avoiding obstacles. I compared a hand-written controller, imitation learning (BC + DAgger) and reinforcement learning (PPO) on 500 unseen test maps, then re-evaluated them in a rigid-body physics engine (MuJoCo).",
+    tools: ["PyTorch", "Stable-Baselines3", "MuJoCo", "ROS 2", "Docker", "Gymnasium"],
     image: "/videos/showcase_poster.png",
     video: "/videos/showcase.mp4",
     imageCaption: "Expert vs imitation vs reinforcement learning",
@@ -289,7 +294,7 @@ export const experience: ExperienceEntry[] = [
     role: "Teaching Assistant — Physics, Thermodynamics & Computation",
     tag: "Teaching",
     description:
-      "Supported a cohort of 500+ students across four course assignments: Physics: Mechanics (Prof. P. Müllhaupt), Physics: Thermodynamics (Prof. S. Bréchet and Prof. J. Genoud), and Information, Computation, Communication (Prof. O. Lévêque). Led exercise sessions, graded midterms, and gave feedback.",
+      "Part-time TA over two semesters, supporting a cohort of 500+ students across four course assignments: Physics: Mechanics (Prof. P. Müllhaupt, autumn 2024), then Physics: Thermodynamics (Prof. S. Bréchet and Prof. J. Genoud) and Information, Computation, Communication (Prof. O. Lévêque) in spring 2025. Led exercise sessions where I walked students through the methods behind Newton's laws and conservation principles, energy and entropy balances, thermodynamic cycles, and, in ICC, information theory, data compression and algorithmic complexity, helping them structure their reasoning. Also graded midterms and gave feedback.",
   },
   {
     org: "EPFL Rocket Team",
@@ -305,7 +310,7 @@ export const experience: ExperienceEntry[] = [
     role: "First-Year Student Coach",
     tag: "Leadership",
     description:
-      "Mentored first-year students through their integration at EPFL, sharing study methods and strategies for the foundation year.",
+      "Part-time coach for first-year students. Organized evenings and social events to build a welcoming community and ease their integration, and gave practical advice on managing workload, study methods and staying motivated through the foundation year.",
   },
   {
     org: "The Academy",
